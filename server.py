@@ -1,36 +1,56 @@
 from pyjoystick.sdl2 import Key, Joystick, run_event_loop
 
+state = ""
+
 def print_add(joy):
-    print('Added', joy)
-
+  print('Added', joy)
 def print_remove(joy):
-    print('Removed', joy)
+  print('Removed', joy)
 
-def key_received(key):
-    print('received', key)
-    if key.value == Key.HAT_UP:
-        print('UP')
-        #do something
-    elif key.value == Key.HAT_DOWN:
-        print('DOWN')
-        #do something
-    if key.value == Key.HAT_LEFT:
-        print('LEFT')
-        #do something
-    elif key.value == Key.HAT_UPLEFT:
-        print('UPLEFT')
-        #do something
-    elif key.value == Key.HAT_DOWNLEFT:
-        print('DOWNLEFT')
-        #do something
-    elif key.value == Key.HAT_RIGHT:
-        print('RIGHT')
-        #do something
-    elif key.value == Key.HAT_UPRIGHT:
-        print('UPRIGHT')
-        #do something
-    elif key.value == Key.HAT_DOWNRIGHT:
-        print('DOWNRIGHT')
-        #do something
+
+def key_received(key: Key):
+  if key.keytype == Key.KeyTypes.BUTTON:
+    # print(key)
+    if key.number == 0:
+      state.button_A = key.value
+    elif key.number == 1:
+      state.button_B = key.value
+    elif key.number == 2:
+      state.button_X = key.value
+    elif key.number == 3:
+      state.button_Y = key.value
+    elif key.number == 4:
+      state.button_L_SHOULDER = key.value
+    elif key.number == 5:
+      state.button_R_SHOULDER = key.value
+    elif key.number == 6:
+      state.button_BACK = key.value
+    elif key.number == 7:
+      state.button_START = key.value
+    # elif key.number == 8: # no this button on steam deck
+    #   pass
+    elif key.number == 9:
+      state.button_L_THUMB = key.value
+    elif key.number == 10:
+      state.button_R_THUMB = key.value
+  elif key.keytype == Key.KeyTypes.AXIS:
+    if key.number == 0:
+      state.left_joystick_x = int(
+          (key.value + 1) / 2 * 65535)  # [-1, 1] => [0, 65535]
+    elif key.number == 1:
+      state.left_joystick_y = int(
+          (-key.value + 1) / 2 * 65535)  # reverse axis-Y value
+    elif key.number == 2:
+      state.left_trigger = int(key.value * 255)  # [0, 1] => [0, 255]
+    elif key.number == 3:
+      state.right_joystick_x = int(
+          (key.value + 1) / 2 * 65535)  # [-1, 1] => [0, 65535]
+    elif key.number == 4:
+      state.right_joystick_y = int(
+          (-key.value + 1) / 2 * 65535)  # reverse axis-Y value
+    elif key.number == 5:
+      state.right_trigger = int(key.value * 255)  # [0, 1] => [0, 255]
+  elif key.keytype == Key.KeyTypes.HAT:
+    state.button_DPAD = key.value
 
 run_event_loop(print_add, print_remove, key_received)
