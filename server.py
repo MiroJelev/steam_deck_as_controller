@@ -1,4 +1,8 @@
 from pyjoystick.sdl2 import Key, Joystick, run_event_loop
+import socket
+
+HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
+PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 
 state = {}
 
@@ -53,5 +57,22 @@ def key_received(key: Key):
   elif key.keytype == Key.KeyTypes.HAT:
     state['button_DPAD'] = key.value
   print(state)
+
+
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.bind((HOST, PORT))
+    s.listen()
+    print(f"Listening at: {s.getsockname}: {PORT}")
+    conn, addr = s.accept()
+
+    with conn:
+        print(f"Connected by {addr}")
+        while True:
+            # data = conn.recv(1024)
+            # if not data:
+            #     break
+            # conn.sendall(data)
+            conn.sendall(state)
+
 
 run_event_loop(print_add, print_remove, key_received)
