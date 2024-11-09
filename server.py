@@ -62,7 +62,7 @@ def key_received(key: Key):
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
     s.listen()
-    print(f"Listening at: {s.getsockname}: {PORT}")
+    print(f"Listening at: {s.getsockname()}: {PORT}")
     conn, addr = s.accept()
 
     with conn:
