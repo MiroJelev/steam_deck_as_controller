@@ -52,5 +52,6 @@ def key_received(key: Key):
       state.right_trigger = int(key.value * 255)  # [0, 1] => [0, 255]
   elif key.keytype == Key.KeyTypes.HAT:
     state.button_DPAD = key.value
+  print(state)
 
 run_event_loop(print_add, print_remove, key_received)
