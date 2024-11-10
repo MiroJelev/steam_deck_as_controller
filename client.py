@@ -72,7 +72,7 @@ def main():
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		s.connect((HOST, PORT))
 		while(1):
-			data = pickle.loads(s.recv(1024).decode('base64', 'strict'))
+			data = pickle.loads(s.recv(1024))
 			# controller(data)
 			print(f"Received: {data}")
 

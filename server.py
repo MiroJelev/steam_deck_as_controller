@@ -73,7 +73,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             # if not data:
             #     break
             # conn.sendall(data)
-            conn.sendall(pickle.dumps(state).encode('base64', 'strict'))
+            conn.sendall(pickle.dumps(state))
 
 
 run_event_loop(print_add, print_remove, key_received)
