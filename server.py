@@ -1,3 +1,4 @@
+import pickle
 from pyjoystick.sdl2 import Key, Joystick, run_event_loop
 import socket
 
@@ -72,7 +73,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             # if not data:
             #     break
             # conn.sendall(data)
-            conn.sendall(state)
+            conn.sendall(pickle.dumps(state).encode('base64', 'strict'))
 
 
 run_event_loop(print_add, print_remove, key_received)

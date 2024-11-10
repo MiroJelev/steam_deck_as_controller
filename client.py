@@ -1,12 +1,13 @@
+import pickle
 import socket
-import vgamepad as vg
+# import vgamepad as vg
 
 
 
 HOST = input("Enter IP Address(default: 192.168.0.12 ): ").strip() or "192.168.0.12"  # Standard loopback interface address (localhost)
 PORT = int(input("Enter Port(default: 2300): ").strip() or 2300)  # Port to listen on (non-privileged ports are > 1023)
 
-gamepad = vg.VDS4Gamepad()
+# gamepad = vg.VDS4Gamepad()
 
 
 # def controller(buttons = []):
@@ -71,7 +72,7 @@ def main():
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		s.connect((HOST, PORT))
 		while(1):
-			data = s.recv(1024)
+			data = pickle.loads(s.recv(1024).decode('base64', 'strict'))
 			# controller(data)
 			print(f"Received: {data}")
 
