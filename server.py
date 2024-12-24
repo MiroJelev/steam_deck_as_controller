@@ -2,7 +2,7 @@ from pyjoystick.sdl2 import Key, Joystick, run_event_loop
 import socket
 import protocol
 
-HOST = socket.gethostname()#"127.0.0.1"  # Standard loopback interface address (localhost)
+HOST = "127.0.0.1"#socket.gethostname()#"127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 
 state = protocol.State()
@@ -15,7 +15,7 @@ def print_remove(joy):
 
 def key_received(key: Key):
   if key.keytype == Key.KeyTypes.BUTTON:
-    # print(key)
+    print(key)
     if key.number == 0:
       state.button_A = key.value
     elif key.number == 1:
