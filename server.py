@@ -2,20 +2,21 @@ from pyjoystick.sdl2 import Key, Joystick, run_event_loop
 import socket
 import protocol
 
-HOST = "127.0.0.1"#socket.gethostname()#"127.0.0.1"  # Standard loopback interface address (localhost)
+HOST = socket.gethostname()#"127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 
 state = protocol.State()
+
+connection = None
 
 def print_add(joy):
   print('Added', joy)
 def print_remove(joy):
   print('Removed', joy)
 
-
 def key_received(key: Key):
+  print(key)
   if key.keytype == Key.KeyTypes.BUTTON:
-    print(key)
     if key.number == 0:
       state.button_A = key.value
     elif key.number == 1:
@@ -58,18 +59,19 @@ def key_received(key: Key):
   elif key.keytype == Key.KeyTypes.HAT:
     state.button_DPAD = key.value
 
+  print(state.encode())
+  connection.sendall(state.encode())
 
+# with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(1)
+print(f"Listening at: {s.getsockname()}: {PORT}")
+connection, addr = s.accept()
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))
-    s.listen()
-    print(f"Listening at: {s.getsockname()}: {PORT}")
-    conn, addr = s.accept()
-
-    with conn:
-        print(f"Connected by {addr}")
-        while True:
-            conn.sendall(state.encode())
-
+    # with connection:
+    #     print(f"Connected by {addr}")
+        # while True:
+        #     connection.sendall(state.encode())
 
 run_event_loop(print_add, print_remove, key_received)

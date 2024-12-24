@@ -4,8 +4,8 @@ import vgamepad as vg
 
 
 
-HOST = "127.0.0.1"#input("Enter IP Address(default: 192.168.0.17 ): ").strip() or "192.168.0.17"  # Standard loopback interface address (localhost)
-PORT = 65432#int(input("Enter Port(default: 65432): ").strip() or 65432)  # Port to listen on (non-privileged ports are > 1023)
+HOST = input("Enter IP Address(default: 192.168.0.17 ): ").strip() or "192.168.0.17"  # Standard loopback interface address (localhost)
+PORT = int(input("Enter Port(default: 65432): ").strip() or 65432)  # Port to listen on (non-privileged ports are > 1023)
 
 gamepad = vg.VDS4Gamepad()
 # gamepad = vg.VX360Gamepad()
@@ -110,14 +110,21 @@ def main():
   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((HOST, PORT))
     while True:
-      # recv more if buffer is not enough
-      while len(buffer) < protocol_len:
-        data = s.recv(recv_len)
-      buffer += data
-
-      new_state = state.decode(buffer[:protocol_len])
-      buffer = buffer[protocol_len:]
+      data = s.recv(recv_len)
+      print(data)
       controller()
+
+  # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+  #   s.connect((HOST, PORT))
+  #   while True:
+  #     # recv more if buffer is not enough
+  #     while len(buffer) < protocol_len:
+  #       data = s.recv(recv_len)
+  #     buffer += data
+  #
+  #     new_state = state.decode(buffer[:protocol_len])
+  #     buffer = buffer[protocol_len:]
+  #     controller()
 
     # while(1):
     #   # buffer = s.recv(protocol_len)
